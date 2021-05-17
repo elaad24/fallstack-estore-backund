@@ -14,14 +14,19 @@ router.post("/", async (req, res) => {
   let user = await User.findOne({
     email: req.body.email,
   });
-  const validPassword = await bcrypt.compare(req.body.password, user.password);
-  if (!validPassword) {
-    return res.status(400).send("Invalid password.");
-  }
 
-  res.json({ statuse: "work as log in " });
-  // autantication not there yet
-  //  res.json({ token: user.generateAuthToken() });
+  if (!user) return res.status(400).json({ email: "worng email - try agin " });
+
+  const validPassword = await bcrypt.compare(req.body.password, user.password);
+  if (!validPassword)
+    return res.status(400).json({ password: "Invalid password." });
+
+  res.json({
+    name: user.name,
+    token: user.generateAuthToken(),
+    seller: user.seller,
+    user_id: user._id,
+  });
 });
 
 function validate(req) {

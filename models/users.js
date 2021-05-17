@@ -1,7 +1,7 @@
 const Joi = require("@hapi/joi");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const config = require("../config/default.json");
+const config = require("config");
 
 /* GET users listing. */
 const userSchema = new mongoose.Schema({
@@ -34,6 +34,14 @@ const userSchema = new mongoose.Schema({
 
   createdAt: { type: Date, default: Date.now },
 });
+
+userSchema.methods.generateAuthToken = function () {
+  const token = jwt.sign(
+    { _id: this._id, seller: this.seller },
+    config.get("jwtKey")
+  );
+  return token;
+};
 
 const User = mongoose.model("User", userSchema);
 

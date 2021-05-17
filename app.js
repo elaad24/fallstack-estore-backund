@@ -12,13 +12,14 @@ const cors = require("cors");
 const indexRouter = require("./routes/index");
 const users = require("./routes/users");
 const auth = require("./routes/auth");
+const products = require("./routes/products");
 
 const app = express();
 
 const http = require("http").Server(app);
 
 // set that all the info that enter to express and move trow the express function will be in json pormat
-app.use(express.json());
+app.use(express.json({ limit: "50mb" }));
 
 app.use(cors());
 
@@ -37,6 +38,7 @@ mongoose
 app.use("/", indexRouter);
 app.use("/api/users", users);
 app.use("/api/auth", auth);
+app.use("/api/products", products);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
