@@ -5,11 +5,7 @@ const _ = require("lodash");
 var router = express.Router();
 const { noPhotoImg } = require("../noPhotoImg");
 
-/* GET home page. */
-router.get("/", function (req, res, next) {
-  res.json({ 1: "products work" });
-});
-
+/* add product  */
 router.post("/addproduct", async (req, res) => {
   const { error } = validate(req.body);
 
@@ -41,6 +37,56 @@ router.post("/addproduct", async (req, res) => {
 
   res.send(
     _.pick(product, [
+      "name",
+      "description",
+      "price",
+      "qty",
+      "category",
+      "pic",
+      "seller_id",
+    ])
+  );
+});
+
+/* Get all product  */
+router.get("/", async (req, res, next) => {
+  let prodlist = [];
+  const products = await Product.find();
+  for (i of products) {
+    prodlist.push(i._doc);
+  }
+  console.log(prodlist);
+
+  res.send(prodlist);
+});
+
+/* get praticale product */
+router.get("/item", async (req, res) => {
+  console.log(req.query);
+  if (!req.query.id) {
+    console.log("error - no parms id ");
+    return res.status(400).send("error - no parms id");
+  }
+
+  const product = await Product.find({ _id: req.query.id });
+  if (!product) {
+    res.status(404).send("error - item doesnt found");
+  }
+  console.log(
+    "product ",
+    _.pick(product[0], [
+      "_id",
+      "name",
+      "description",
+      "price",
+      "qty",
+      "category",
+      "pic",
+      "seller_id",
+    ])
+  );
+  res.send(
+    _.pick(product[0], [
       "name",
       "description",
       "price",
