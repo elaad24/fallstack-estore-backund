@@ -55,14 +55,12 @@ router.get("/", async (req, res, next) => {
   for (i of products) {
     prodlist.push(i._doc);
   }
-  console.log(prodlist);
 
   res.send(prodlist);
 });
 
 /* get praticale product */
 router.get("/item", async (req, res) => {
-  console.log(req.query);
   if (!req.query.id) {
     console.log("error - no parms id ");
     return res.status(400).send("error - no parms id");
@@ -72,19 +70,7 @@ router.get("/item", async (req, res) => {
   if (!product) {
     res.status(404).send("error - item doesnt found");
   }
-  console.log(
-    "product ",
-    _.pick(product[0], [
-      "_id",
-      "name",
-      "description",
-      "price",
-      "qty",
-      "category",
-      "pic",
-      "seller_id",
-    ])
-  );
+
   res.send(
     _.pick(product[0], [
       "name",

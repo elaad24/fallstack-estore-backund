@@ -110,7 +110,7 @@ router.put("/removeItem", async (req, res, next) => {
   shoppingCart.products = newshoppingCart;
 
   await shoppingCart.save();
-  console.log("item removed ");
+
   res.send("item removed");
 });
 
