@@ -13,6 +13,7 @@ router.get("/", async (req, res) => {
   if (!shoppingCart) {
     res.send("no items in shopping cart ");
   } else if (shoppingCart) {
+    [];
     // nedd to re arang and chang what send
     // do map and then pic and then send
 
@@ -48,6 +49,7 @@ router.post("/addproduct", async (req, res, next) => {
     const newProduct = {
       productid: req.body.productid,
       quantity: req.body.quantity,
+      price: req.body.price,
     };
 
     //  add to the rest of the products
@@ -70,7 +72,11 @@ router.post("/addproduct", async (req, res, next) => {
 
     let products = [
       {
-        product: { productid: req.body.productid, quantity: req.body.quantity },
+        product: {
+          productid: req.body.productid,
+          quantity: req.body.quantity,
+          price: req.body.price,
+        },
       },
     ];
 
@@ -95,7 +101,6 @@ const getShoppingCart = async (user_id) => {
 };
 
 // remove item from userr's shopping cart
-// need to get user_id , productid in body
 router.put("/removeItem", async (req, res, next) => {
   let shoppingCart = await getShoppingCart(req.query.user_id);
 
@@ -107,6 +112,23 @@ router.put("/removeItem", async (req, res, next) => {
   await shoppingCart.save();
   console.log("item removed ");
   res.send("item removed");
+});
+
+// update the qty of product in shopping cart - need body.user_id , body.productid , body.updateQty
+router.patch("/updataShoppingCart", async (req, res, next) => {
+  try {
+    let shoppingCart = await getShoppingCart(req.body.user_id);
+    await _.map(shoppingCart.products, (product) => {
+      if (product.product.productid == req.body.productid) {
+        return (product.product.quantity = req.body.updateQty);
+      }
+    });
+    shoppingCart.save();
+    res.status(201);
+  } catch (err) {
+    console.log(err);
+    return err;
+  }
 });
 
 module.exports = router;

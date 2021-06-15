@@ -18,6 +18,10 @@ const shoppingCartSchema = new mongoose.Schema({
           type: String,
           required: true,
         },
+        price: {
+          type: Number,
+          required: true,
+        },
       },
     },
   ],
@@ -30,6 +34,7 @@ function validateShoppingCart(shoppingCart) {
     user_id: Joi.string().required(),
     productid: Joi.string().required(),
     quantity: Joi.number().required(),
+    price: Joi.number().required(),
   });
   return schema.validate(shoppingCart, { abortEarly: false });
 }
