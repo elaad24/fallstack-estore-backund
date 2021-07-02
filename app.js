@@ -31,7 +31,7 @@ mongoose
   //  local host
   //.connect("mongodb://localhost/e_store_server", {
   .connect(
-    "mongodb+srv://admin:Admin@projects.ffjrl.mongodb.net/e_store_server",
+    secret.DATABASE_CONNECTION,
     {
       useNewUrlParser: true,
       useUnifiedTopology: true,
